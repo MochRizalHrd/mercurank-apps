@@ -31,6 +31,10 @@ $routes->get('/kriteria/edit/(:num)', 'Kriteria::edit/$1');
 $routes->post('/kriteria/update/(:num)', 'Kriteria::update/$1');
 $routes->get('/kriteria/delete/(:num)', 'Kriteria::delete/$1');
 
+//Menu Perhitungan
+$routes->get('/perhitungan', 'Perhitungan::ratingNilai');
+
+
 // Menu Pengguna
 $routes->get('/pengguna', 'Pengguna::index');
 $routes->get('/pengguna/create', 'Pengguna::create');
