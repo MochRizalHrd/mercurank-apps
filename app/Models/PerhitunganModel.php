@@ -53,4 +53,88 @@ class PerhitunganModel extends Model
 
         return $normalizedData;
     }
+
+    public function getOptimalisasiMatrix()
+    {
+        $normalized = $this->getNormalizedMatrix();
+
+        // Ambil bobot dari tabel kriteria
+        $db = \Config\Database::connect();
+        $query = $db->query("SELECT * FROM kriteria");
+        $kriteria = $query->getResultArray();
+
+        $bobot = array_column($kriteria, 'bobot', 'kode');
+
+        $optimalisasi = [];
+        foreach ($normalized as $norm) {
+            $optimalisasi[] = [
+                'kode' => $norm['kode'],
+                'k1' => $norm['ipk'] * $bobot['K1'],
+                'k2' => $norm['masa_studi'] * $bobot['K2'],
+                'k3' => $norm['keaktifan_organisasi'] * $bobot['K3'],
+                'k4' => $norm['prestasi_akademik'] * $bobot['K4'],
+                'k5' => $norm['prestasi_non_akademik'] * $bobot['K5'],
+            ];
+        }
+
+        return $optimalisasi;
+    }
+
+    public function calculateYi()
+    {
+        $optimalisasi = $this->getOptimalisasiMatrix();
+
+        $data = [];
+        foreach ($optimalisasi as $row) {
+            $max = $row['k1'] + $row['k2'] + $row['k3'] + $row['k4'] + $row['k5'];
+            $min = 0; // Karena semua kategori Max
+            $yi = $max - $min;
+
+            $data[] = [
+                'kode' => $row['kode'],
+                'max' => $max,
+                'min' => $min,
+                'yi' => $yi,
+            ];
+        }
+
+        return $data;
+    }
+
+    public function peringkat()
+    {
+        $optimalisasi = $this->getOptimalisasiMatrix();
+
+        $data = [];
+        foreach ($optimalisasi as $row) {
+
+            $mahasiswa = $this->db->query("SELECT nim, nama_lengkap FROM mahasiswa WHERE kode = ?", [$row['kode']])->getRowArray();
+
+            $nim = isset($mahasiswa['nim']) ? $mahasiswa['nim'] : null; // Ambil nim atau null jika tidak ada
+            $nama_lengkap = isset($mahasiswa['nama_lengkap']) ? $mahasiswa['nama_lengkap'] : null; // Ambil nim atau null jika tidak ada
+
+            $max = $row['k1'] + $row['k2'] + $row['k3'] + $row['k4'] + $row['k5'];
+            $min = 0; // Karena semua kategori Max
+            $yi = $max - $min;
+
+            $data[] = [
+                'kode' => $row['kode'],
+                'nim' => $nim,
+                'nama_lengkap' => $nama_lengkap,
+                'yi' => $yi,
+            ];
+        }
+
+        // Menambahkan peringkat berdasarkan nilai yi
+        usort($data, function ($a, $b) {
+            return $b['yi'] <=> $a['yi']; // Urutkan secara menurun berdasarkan Yi
+        });
+
+        // Menambahkan peringkat
+        foreach ($data as $index => &$row) {
+            $row['perankingan'] = $index + 1; // Peringkat dimulai dari 1
+        }
+
+        return $data;
+    }
 }

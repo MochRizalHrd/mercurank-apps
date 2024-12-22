@@ -34,6 +34,10 @@ $routes->get('/kriteria/delete/(:num)', 'Kriteria::delete/$1');
 //Menu Perhitungan
 $routes->get('/perhitungan', 'Perhitungan::ratingNilai');
 
+//Menu Laporan dan Hasil
+$routes->get('laporan', 'Laporan::index');
+$routes->get('laporan/unduhPdf', 'Laporan::unduhPdf');
+
 
 // Menu Pengguna
 $routes->get('/pengguna', 'Pengguna::index');
