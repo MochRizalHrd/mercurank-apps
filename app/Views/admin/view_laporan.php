@@ -5,13 +5,13 @@
         <a href="<?= base_url('laporan/unduhPdf') ?>" class="btn btn-primary">Unduh Semua Laporan (PDF)</a>
     </div>
     <table id="laporanTable" class="table table-bordered table-striped">
-        <thead class="thead-dark">
+        <thead>
             <tr>
                 <th>No.</th>
                 <th>Nama Mahasiswa</th>
                 <th>NIM</th>
-                <th>Skor Akhir</th>
-                <th>Ranking</th>
+                <th>Nilai Akhir</th>
+                <th>Peringkat</th>
             </tr>
         </thead>
         <tbody>
