@@ -137,4 +137,16 @@ class PerhitunganModel extends Model
 
         return $data;
     }
+
+    public function savePerhitungan($data)
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table('perhitungan_moora');
+
+        // Hapus semua data sebelumnya (opsional, jika data lama tidak diperlukan)
+        $builder->truncate();
+
+        // Simpan data baru
+        $builder->insertBatch($data);
+    }
 }

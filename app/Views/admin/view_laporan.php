@@ -7,11 +7,11 @@
     <table id="laporanTable" class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>No.</th>
-                <th>Nama Mahasiswa</th>
-                <th>NIM</th>
-                <th>Nilai Akhir</th>
+                <th>No. Laporan</th>
                 <th>Peringkat</th>
+                <th>NIM</th>
+                <th>Nama Mahasiswa</th>
+                <th>Nilai Akhir</th>
             </tr>
         </thead>
         <tbody>
@@ -19,10 +19,10 @@
             foreach ($laporan as $row): ?>
                 <tr>
                     <td><?= $no++ ?></td>
-                    <td><?= $row['nama_mahasiswa'] ?></td>
-                    <td><?= $row['nim'] ?></td>
-                    <td><?= $row['skor_akhir'] ?></td>
                     <td><?= $row['ranking'] ?></td>
+                    <td><?= $row['nim'] ?></td>
+                    <td><?= $row['nama_mahasiswa'] ?></td>
+                    <td><?= $row['skor_akhir'] ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

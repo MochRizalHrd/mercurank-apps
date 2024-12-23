@@ -22,6 +22,23 @@ class Perhitungan extends BaseController
         $perhitunganAkhir = $this->perhitunganModel->calculateYi(); // Perhitungan akhir (Yi)
         $peringkat = $this->perhitunganModel->peringkat();
 
+        // Siapkan data untuk disimpan ke tabel perhitungan_moora
+        $dataToSave = [];
+        foreach ($peringkat as $item) {
+            $dataToSave[] = [
+                'peringkat' => $item['perankingan'],
+                'kode' => $item['kode'],
+                'nim' => $item['nim'],
+                'nama_lengkap' => $item['nama_lengkap'],
+                'hasil_akhir' => $item['yi'],
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ];
+        }
+
+        // Simpan ke database
+        $this->perhitunganModel->savePerhitungan($dataToSave);
+
         // Menambahkan peringkat pada perhitungan akhir
         // Urutkan berdasarkan nilai Yi
         usort($peringkat, function ($a, $b) {
@@ -32,7 +49,6 @@ class Perhitungan extends BaseController
         foreach ($peringkat as $index => &$row) {
             $row['perankingan'] = $index + 1; // Menambahkan peringkat
         }
-
 
 
         // Data yang akan dikirim ke view
