@@ -147,9 +147,14 @@ class CreateTables extends Migration
                 'constraint'     => 11,
                 'auto_increment' => true,
             ],
-            'id_mahasiswa' => [
+            'peringkat' => [
                 'type' => 'INT',
                 'constraint' => 11,
+                'null' => false,
+            ],
+            'kode' => [
+                'type'           => 'VARCHAR',
+                'constraint'     => '11',
             ],
             'nim' => [
                 'type' => 'VARCHAR',
@@ -160,13 +165,10 @@ class CreateTables extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
-            'nilai_perhitungan' => [
+            'hasil_akhir' => [
                 'type' => 'DECIMAL',
-                'constraint' => '5,2',
-            ],
-            'peringkat' => [
-                'type' => 'INT',
-                'constraint' => 11,
+                'constraint' => '10,4',
+                'null' => false,
             ],
             'created_at' => [
                 'type' => 'DATETIME',
@@ -178,7 +180,6 @@ class CreateTables extends Migration
             ],
         ]);
         $this->forge->addPrimaryKey('id_perhitungan');
-        $this->forge->addForeignKey('id_mahasiswa', 'mahasiswa', 'id_mahasiswa');
         $this->forge->createTable('perhitungan_moora');
 
         // Tabel Laporan
@@ -188,11 +189,24 @@ class CreateTables extends Migration
                 'constraint'     => 11,
                 'auto_increment' => true,
             ],
-            'laporan' => [
-                'type' => 'TEXT',
+            'peringkat' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => false,
             ],
-            'tanggal' => [
-                'type' => 'DATETIME',
+            'nim' => [
+                'type' => 'VARCHAR',
+                'constraint' => '20',
+                'unique' => true,
+            ],
+            'nama_lengkap' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+            ],
+            'hasil_akhir' => [
+                'type' => 'DECIMAL',
+                'constraint' => '10,4',
+                'null' => false,
             ],
             'created_at' => [
                 'type' => 'DATETIME',
