@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\MahasiswaModel;
 use App\Models\KriteriaModel;
 use App\Models\PenggunaModel;
+use App\Models\PerhitunganModel;
 
 class Dashboard extends BaseController
 {
@@ -41,12 +42,15 @@ class Dashboard extends BaseController
         $mahasiswaModel = new MahasiswaModel();
         $kriteriaModel = new KriteriaModel();
         $penggunaModel = new PenggunaModel();
+        $perhitunganModel = new PerhitunganModel();
 
         $data = [
             'title' => 'Dashboard',
             'total_mahasiswa' => $mahasiswaModel->countAll(),
             'total_kriteria' => $kriteriaModel->countAll(),
             'total_pengguna' => $penggunaModel->countAll(),
+            'total_perhitungan' => $perhitunganModel->countAll(),
+            'top_mahasiswa' => $perhitunganModel->getTopMahasiswa(),
             'admin_name' => $this->session->get('admin_name'), // Mengambil nama admin dari session
         ];
 

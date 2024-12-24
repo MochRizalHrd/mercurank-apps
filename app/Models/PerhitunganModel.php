@@ -149,4 +149,14 @@ class PerhitunganModel extends Model
         // Simpan data baru
         $builder->insertBatch($data);
     }
+
+    public function getTopMahasiswa()
+    {
+        $builder = $this->db->table('perhitungan_moora');
+        $builder->select('nim, nama_lengkap, hasil_akhir');
+        $builder->orderBy('hasil_akhir', 'desc');
+        $builder->limit(3);
+
+        return $builder->get()->getResult();
+    }
 }
