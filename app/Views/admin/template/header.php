@@ -7,8 +7,6 @@
     <title>MercuRank - <?= $title ?></title>
 
 
-
-
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -36,6 +34,5 @@
         crossorigin="anonymous"></script>
 
     <link rel="icon" href="<?= base_url('assets/img/logo-umby-tab.png') ?>" type="image/x-icon">
-
 
 </head>

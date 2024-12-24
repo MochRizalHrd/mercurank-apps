@@ -15,17 +15,14 @@ class Laporan extends BaseController
     }
 
     public function index()
-
     {
-        $laporanModel = new LaporanModel();
+        // Panggil simpanKeLaporan untuk menyimpan data otomatis
+        $this->simpanKeLaporan();
 
         $data = [
-            'title' => 'Data Kriteria',
-
+            'title' => 'Laporan dan Hasil',
+            'laporan' => $this->laporanModel->getLaporan()
         ];
-
-        $data['laporan'] = $this->laporanModel->getLaporan();
-
 
         echo view('admin/template/header', $data);
         echo view('admin/template/sidebar', $data);
@@ -36,26 +33,29 @@ class Laporan extends BaseController
     public function unduhPdf()
     {
         $laporan = $this->laporanModel->getLaporan();
+        $tanggalCetak = date('d-m-Y H:i:s'); // Format tanggal dan waktu
 
         // Inisialisasi TCPDF
         $pdf = new TCPDF();
         $pdf->AddPage();
         $pdf->SetFont('helvetica', '', 12);
 
-        // Header
+        // Header PDF
         $pdf->Cell(0, 10, 'Laporan Hasil dan Riwayat Perhitungan MOORA', 0, 1, 'C');
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(0, 10, 'Tanggal Cetak: ' . $tanggalCetak, 0, 1, 'R'); // Tanggal di header
         $pdf->Ln(5);
 
-        // Tabel
+        // Tabel PDF
         $html = '
         <table border="1" cellspacing="3" cellpadding="4">
             <thead>
                 <tr>
                     <th>No.</th>
-                    <th>Nama Mahasiswa</th>
+                    <th>Peringkat</th>
                     <th>NIM</th>
-                    <th>Skor Akhir</th>
-                    <th>Ranking</th>
+                    <th>Nama Mahasiswa</th>
+                    <th>Nilai Akhir</th>
                 </tr>
             </thead>
             <tbody>';
@@ -65,16 +65,35 @@ class Laporan extends BaseController
             $html .= '
                 <tr>
                     <td>' . $no++ . '</td>
-                    <td>' . $row['nama_lengkap'] . '</td>
-                    <td>' . $row['nim'] . '</td>
-                    <td>' . $row['nilai_perhitungan'] . '</td>
                     <td>' . $row['peringkat'] . '</td>
+                    <td>' . $row['nim'] . '</td>
+                    <td>' . $row['nama_lengkap'] . '</td>
+                    <td>' . $row['hasil_akhir'] . '</td>
                 </tr>';
         }
 
         $html .= '</tbody></table>';
 
         $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Output('laporan_moora.pdf', 'D'); // File akan otomatis terunduh
+        $pdf->Output('laporan_moora_' . date('Ymd_His') . '.pdf', 'D'); // Nama file dengan tanggal
+    }
+
+    public function simpanKeLaporan()
+    {
+        // Ambil data dari tabel perhitungan_moora
+        $laporanData = $this->laporanModel->getLaporan();
+
+        // Hapus data lama jika perlu untuk menghindari duplikasi
+        $this->laporanModel->truncate(); // Hapus semua data lama di tabel laporan (opsional)
+
+        // Looping untuk menyimpan setiap data ke tabel laporan
+        foreach ($laporanData as $data) {
+            $this->laporanModel->insert([
+                'peringkat' => $data['peringkat'], // Sesuaikan dengan kolom yang ada di perhitungan_moora
+                'nim' => $data['nim'],
+                'nama_lengkap' => $data['nama_lengkap'],
+                'hasil_akhir' => $data['hasil_akhir'],
+            ]);
+        }
     }
 }

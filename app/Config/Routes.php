@@ -37,6 +37,9 @@ $routes->get('/perhitungan', 'Perhitungan::ratingNilai');
 //Menu Laporan dan Hasil
 $routes->get('laporan', 'Laporan::index');
 $routes->get('laporan/unduhPdf', 'Laporan::unduhPdf');
+$routes->get('laporan/simpanKeLaporan', 'Laporan::simpanKeLaporan');
+
+
 
 
 // Menu Pengguna
