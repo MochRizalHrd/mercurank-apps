@@ -3,10 +3,10 @@
     <div class="d-flex justify-content-between mb-3">
         <p><strong>Tanggal Cetak:</strong> <?= date('d-m-Y H:i:s') ?></p> <!-- Tanggal lengkap -->
         <div>
-            <a href="<?= base_url('laporan/unduhPdf') ?>" class="btn btn-primary">Unduh Semua Laporan (PDF)</a>
+            <a href="<?= base_url('laporan/unduhPdf') ?>" class="btn" style="background-color: #257180; color:#ffffff; border:none;">Unduh Semua Laporan (PDF)</a>
         </div>
     </div>
-    <table id="laporanTable" class="table table-bordered table-striped">
+    <table id=" laporanTable" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>No.</th>
